@@ -1,58 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import { SignIn } from "./components/auth/SignIn";
+import { SignUp } from "./components/auth/SignUp";
+import { Feed } from "./components/feed/Feed";
+import PrivateRoute from "./components/shared/PrivateRoute";
+import { SidebarRight } from "./components/sidebar/SidebarRight";
+import { Auth } from "./pages/auth/Auth";
+import { Bookmark } from "./pages/bookmark/Bookmark";
+import { Chats } from "./pages/chats/Chats";
+import { Explore } from "./pages/explore/Explore";
+import { Home } from "./pages/home/Home";
+import { Profile } from "./pages/profile/Profile";
+import { Theme } from "./pages/theme/Theme";
 
-function App() {
+export const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Auth />}>
+          <Route index element={<SignIn />} />
+          <Route path="signup" element={<SignUp />} />
+        </Route>
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        >
+          <Route index path="feed" element={<Feed />} />
+          <Route path="explore" element={<Explore />} />
+          <Route path="discover" element={<SidebarRight />} />
+          <Route path="bookmarks" element={<Bookmark />} />
+          <Route path="chats" element={<Chats />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="theme" element={<Theme />} />
+        </Route>
+      </Routes>
+    </>
   );
-}
-
-export default App;
+};

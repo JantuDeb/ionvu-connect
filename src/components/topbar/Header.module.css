@@ -1,0 +1,100 @@
+.container {
+    /* width: 100%; */
+    background-color: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    padding: 0.5rem;
+    gap: 1rem;
+}
+
+.left {
+    flex: 3;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-primary-dark);
+}
+
+.middle {
+    flex: 5
+}
+
+.search {
+    display: flex;
+    width: 100%;
+    border-radius: 1rem;
+    background-color: #fff;
+    max-width: 20rem;
+    padding: 0.2rem 0.5rem;
+    align-items: center;
+}
+
+.search:focus {
+    outline: 1px var(--text-primary) solid;
+}
+
+.inputSearch {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+}
+
+.inputSearch:focus {
+    outline: 1px transparent solid;
+}
+
+.right {
+    flex: 4;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.links {
+    display: inline-flex;
+    gap: 0.5rem;
+}
+
+.link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.icons {
+    display: flex;
+    gap: 0.8rem;
+    color: #fff;
+}
+
+
+.iconItem {
+    position: relative;
+}
+
+
+.iconBadge {
+    width: 1rem;
+    height: 1rem;
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    background-color: var(--color-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.8rem;
+}
+
+
+.profileImg {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    object-fit: cover;
+}

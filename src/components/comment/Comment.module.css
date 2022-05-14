@@ -1,0 +1,16 @@
+.comment{
+    display: flex;
+    align-items: center;
+}
+
+.commentRight{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.profileImg {
+    width: 4rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    overflow: hidden;
+}
