@@ -10,7 +10,7 @@ export const fetchComments = createAsyncThunk(
   "comment/fetchComment",
   async (postId) => {
     try {
-      const { data } = await axios.get("/post/comment/"+postId, axiosConfig);
+      const { data } = await axios.get("/comments", axiosConfig);
       if (data.success) {
         return data.comments;
       }
@@ -24,11 +24,7 @@ export const addComment = createAsyncThunk(
   "comment/addComment",
   async (comment) => {
     try {
-      const { data } = await axios.post(
-        "/post/comment",
-        { comment },
-        axiosConfig
-      );
+      const { data } = await axios.post("comments", comment, axiosConfig);
       if (data.success) {
         return data.comment;
       }

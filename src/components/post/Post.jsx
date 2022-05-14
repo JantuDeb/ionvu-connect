@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MdDeleteOutline } from "react-icons/md";
 import { BiBookmark } from "react-icons/bi";
-import { FiSend } from "react-icons/fi";
 import {
   AiOutlineHeart,
   AiOutlineMessage,
@@ -20,9 +19,18 @@ import {
   likePost,
 } from "../../features/post/post-slice";
 import { Comments } from "../comment/Comments";
+import {
+  addComment,
+  fetchComments,
+} from "../../features/comment/comment-slice";
+import { CommentForm } from "../comment/CommentForm";
 export const Post = ({ post, bookmark = false }) => {
-  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchComments(post._id));
+  }, [dispatch, post._id]);
+
+  const user = useSelector((state) => state.auth.user);
 
   const handleBookmarkClick = () => {
     if (bookmark) dispatch(removeBookmarks(post._id));
@@ -35,6 +43,11 @@ export const Post = ({ post, bookmark = false }) => {
     if (!isLiked) dispatch(likePost(post._id));
     else dispatch(disLikePost(post._id));
   };
+
+  const addCommentHandler = (text) => {
+    dispatch(addComment({ postId: post._id, body: text }));
+  };
+
   return (
     post && (
       <div className={styles.post}>
@@ -82,18 +95,8 @@ export const Post = ({ post, bookmark = false }) => {
             <BiBookmark size={20} color={bookmark ? "#2563eb" : ""} />
           </button>
         </div>
-        <div className={styles.searchBar}>
-          <input
-            type="text"
-            name="comment"
-            placeholder="Write a comment"
-            className={styles.inputSearch}
-          />
-          <FiSend size={20} />
-        </div>
-        {/* <div className={styles.comment}>
-          <Comments postId={post._id} />
-        </div> */}
+        <CommentForm handleSubmit={addCommentHandler} />
+        <Comments postId={post._id} />
       </div>
     )
   );

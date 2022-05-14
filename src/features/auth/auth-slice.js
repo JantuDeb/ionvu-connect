@@ -19,8 +19,16 @@ export const login = createAsyncThunk("auth/login", async (user) => {
     return Promise.reject(error);
   }
 });
-
-
+export const signup = createAsyncThunk("auth/signup", async (user) => {
+  try {
+    const { data } = await axios.post("/signup", user, axiosConfig);
+    if (data.success) {
+      return data.user;
+    }
+  } catch (error) {
+    return Promise.reject(error);
+  }
+});
 
 export const updateProfile = createAsyncThunk(
   "user/updateProfile",
@@ -61,7 +69,9 @@ export const authState = createSlice({
       state.user = action.payload;
     },
 
-  
+    [signup.fulfilled]: (state, action) => {
+      state.user = action.payload;
+    },
   },
 });
 

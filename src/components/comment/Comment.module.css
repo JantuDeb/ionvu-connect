@@ -3,7 +3,7 @@
     align-items: center;
 }
 
-.commentRight{
+.flex{
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -13,4 +13,23 @@
     aspect-ratio: 1/1;
     border-radius: 50%;
     overflow: hidden;
+}
+
+.searchBar {
+    display: flex;
+    background-color: var(--color-light);
+    border-radius: var(--border-radius);
+    padding: var(--search-padding);
+    width: 100%;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    color: var(--color-dark);
+}
+
+.inputSearch {
+    background-color: transparent;
+    color: var(--color-dark);
+    width: 100%;
+    margin-left: 0.8rem;
+    font-size: 0.9rem;
 }
