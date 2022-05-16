@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdDeleteOutline } from "react-icons/md";
 import { BiBookmark } from "react-icons/bi";
@@ -24,13 +24,17 @@ import {
   fetchComments,
 } from "../../features/comment/comment-slice";
 import { CommentForm } from "../comment/CommentForm";
+import { formatDate } from "../../utils/utils";
+
 export const Post = ({ post, bookmark = false }) => {
+  const [showComments, setShowComments] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchComments(post._id));
   }, [dispatch, post._id]);
 
   const user = useSelector((state) => state.auth.user);
+  const bookmarks = useSelector((state) => state.bookmark.bookmarks);
 
   const handleBookmarkClick = () => {
     if (bookmark) dispatch(removeBookmarks(post._id));
@@ -38,7 +42,7 @@ export const Post = ({ post, bookmark = false }) => {
   };
 
   const isLiked = post.likes.includes(user._id);
-
+  const isbookMarked = bookmarks.some((book) => book.post._id === post._id);
   const likeClikeHandler = () => {
     if (!isLiked) dispatch(likePost(post._id));
     else dispatch(disLikePost(post._id));
@@ -46,21 +50,27 @@ export const Post = ({ post, bookmark = false }) => {
 
   const addCommentHandler = (text) => {
     dispatch(addComment({ postId: post._id, body: text }));
+    setShowComments(true);
   };
 
   return (
     post && (
       <div className={styles.post}>
         <div className={styles.head}>
-          <div className={styles.profile}>
-            <Link to="/" className={styles.profileImg}>
+          <Link
+            to={`/home/profile/${post?.user?._id}`}
+            className={styles.profile}
+          >
+            <div className={styles.profileImg}>
               <img src={post?.user?.photo?.secure_url} alt="profile" />
-            </Link>
+            </div>
             <div className={styles.profileHandle}>
               <h4>{post?.user?.name}</h4>
-              <p className="text-gray">Agartala, 15 MINUTES AGO</p>
+              <p className="text-gray">
+                {post?.user?.location}, {formatDate(post.createdAt)}
+              </p>
             </div>
-          </div>
+          </Link>
           {post.user._id === user._id && (
             <button
               className="transparent"
@@ -78,8 +88,8 @@ export const Post = ({ post, bookmark = false }) => {
         <div className={styles.description}>
           <p>{post?.description}</p>
           <p className={styles.tags}>
-            {post?.tags?.map((tag) => (
-              <span>{tag}</span>
+            {post?.tags?.map((tag,index) => (
+              <span key={index}>{tag}</span>
             ))}
           </p>
         </div>
@@ -88,15 +98,23 @@ export const Post = ({ post, bookmark = false }) => {
             <button className="transparent" onClick={likeClikeHandler}>
               <AiOutlineHeart size={20} color={isLiked ? "red" : "black"} />
             </button>
-            <AiOutlineMessage size={20} />
+            <button
+              className="transparent"
+              onClick={() => setShowComments((v) => !v)}
+            >
+              <AiOutlineMessage size={20} />
+            </button>
             <AiOutlineShareAlt size={20} />
           </div>
           <button className="transparent" onClick={handleBookmarkClick}>
-            <BiBookmark size={20} color={bookmark ? "#2563eb" : ""} />
+            <BiBookmark
+              size={20}
+              color={bookmark || isbookMarked ? "#2563eb" : ""}
+            />
           </button>
         </div>
         <CommentForm handleSubmit={addCommentHandler} />
-        <Comments postId={post._id} />
+        {showComments && <Comments postId={post._id} />}
       </div>
     )
   );

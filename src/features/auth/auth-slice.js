@@ -5,8 +5,11 @@ import { axiosConfig } from "../../config/axios-config";
 const initialState = {
   user: {},
   isLoggedIn: false,
-  loginError: "idle",
-  loginStatus: "loading",
+  loginError: "",
+  loginStatus: "idle",
+  updateProfileStatus: "idle",
+  updateProfileError: "",
+  userProfileData: {},
 };
 
 export const login = createAsyncThunk("auth/login", async (user) => {
@@ -19,9 +22,20 @@ export const login = createAsyncThunk("auth/login", async (user) => {
     return Promise.reject(error);
   }
 });
+
 export const signup = createAsyncThunk("auth/signup", async (user) => {
   try {
     const { data } = await axios.post("/signup", user, axiosConfig);
+    if (data.success) {
+      return data.user;
+    }
+  } catch (error) {
+    return Promise.reject(error);
+  }
+});
+export const getUser = createAsyncThunk("user/getUser", async (userId) => {
+  try {
+    const { data } = await axios.get("/user/" + userId, axiosConfig);
     if (data.success) {
       return data.user;
     }
@@ -67,10 +81,20 @@ export const authState = createSlice({
     },
     [updateProfile.fulfilled]: (state, action) => {
       state.user = action.payload;
+      state.updateProfileStatus = "succeeded";
+    },
+    [updateProfile.pending]: (state, action) => {
+      state.updateProfileStatus = "loading";
+    },
+    [updateProfile.rejected]: (state, action) => {
+      state.updateProfileStatus = "failed";
     },
 
     [signup.fulfilled]: (state, action) => {
       state.user = action.payload;
+    },
+    [getUser.fulfilled]: (state, action) => {
+      state.userProfileData = action.payload;
     },
   },
 });

@@ -14,6 +14,7 @@ export const Bookmark = () => {
   return (
     <div className={styles.posts}>
       {bookmarks.map((bookmark) => {
+        console.log(bookmark);
         return <Post key={bookmark._id} post={bookmark.post} bookmark={true} />;
       })}
     </div>

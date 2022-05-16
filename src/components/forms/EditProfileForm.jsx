@@ -2,8 +2,9 @@ import styles from "./EditProfileForm.module.css";
 import { MdOutlineCameraEnhance } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../../features/auth/auth-slice";
+import Button from "../loader/Button";
 export const EditProfileForm = ({ user, setShowModal }) => {
   const [userData, setUserData] = useState({
     name: user?.name || "",
@@ -19,6 +20,7 @@ export const EditProfileForm = ({ user, setShowModal }) => {
     bannerUrl: user?.banner?.secure_url || "",
   });
 
+  const status = useSelector((state) => state.auth.updateProfileStatus);
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
@@ -46,16 +48,21 @@ export const EditProfileForm = ({ user, setShowModal }) => {
     fileReader.readAsDataURL(e.target.files[0]);
   };
 
-  const handleSubmit = () => {
-    if (userData.photo || userData.banner) {
-      const formData = new FormData();
-      Object.entries(userData).forEach(([key, value]) => {
-        if (value) formData.append(key, value);
-      });
+  const handleSubmit = async () => {
+    try {
+      if (userData.photo || userData.banner) {
+        const formData = new FormData();
+        Object.entries(userData).forEach(([key, value]) => {
+          if (value) formData.append(key, value);
+        });
 
-      dispatch(updateProfile(formData));
-    } else {
-      dispatch(updateProfile(userData));
+        await dispatch(updateProfile(formData)).unwrap();
+      } else {
+        await dispatch(updateProfile(userData)).unwrap();
+      }
+      setShowModal(false)
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -70,9 +77,12 @@ export const EditProfileForm = ({ user, setShowModal }) => {
           </button>
           <h2>Edit Profile</h2>
         </div>
-        <button className="btn btn-primary" onClick={handleSubmit}>
-          Save
-        </button>
+        <Button
+          loading={status === "loading"}
+          text="Save"
+          clickHandler={handleSubmit}
+          disabled={status === "loading"}
+        />
       </div>
       <section className={styles.editProfile}>
         <div className={styles.header}>

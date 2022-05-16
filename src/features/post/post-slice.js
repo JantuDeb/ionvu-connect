@@ -5,6 +5,7 @@ import { axiosConfig } from "../../config/axios-config";
 const initialState = {
   feeds: [],
   posts: [],
+  userPosts: [],
   feedFetchError: "",
   feedFetchStatus: "idle",
   postCreateStatus: "idle",
@@ -37,12 +38,25 @@ export const fetchAllPosts = createAsyncThunk(
     }
   }
 );
+export const fetchUserPosts = createAsyncThunk(
+  "post/fetchUserPosts",
+  async (userId) => {
+    try {
+      const { data } = await axios.get("/posts/" + userId, axiosConfig);
+      if (data.success) {
+        return data.posts;
+      }
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+);
 
 export const createPost = createAsyncThunk("post/createPost", async (post) => {
   try {
     const { data } = await axios.post("/posts", post, axiosConfig);
     if (data.success) {
-      return data.posts;
+      return data.post;
     }
   } catch (error) {
     return Promise.reject(error);
@@ -106,7 +120,7 @@ export const postSlice = createSlice({
     },
 
     [createPost.fulfilled]: (state, action) => {
-      state.feeds.concat(action.payload);
+      state.feeds.unshift(action.payload);
       state.postCreateStatus = "succeeded";
     },
     [createPost.pending]: (state, action) => {
@@ -118,6 +132,14 @@ export const postSlice = createSlice({
     [fetchAllPosts.fulfilled]: (state, action) => {
       state.posts = action.payload;
     },
+
+    [fetchUserPosts.fulfilled]: (state, action) => {
+      state.userPosts = action.payload;
+    },
+    [fetchUserPosts.rejected]: (state, action) => {
+      state.userPosts = [];
+    },
+
     [deletePost.fulfilled]: (state, action) => {
       state.posts = state.posts.filter(
         (post) => post._id !== action.payload._id

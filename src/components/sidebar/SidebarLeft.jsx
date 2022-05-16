@@ -38,7 +38,7 @@ export const SidebarLeft = () => {
   ];
   return (
     <aside className={styles.left}>
-      <Link to="/home/profile" className={styles.profile}>
+      <Link to={`/home/profile/${user._id}`} className={styles.profile}>
         <div className={styles.profileImg}>
           <img src={user?.photo?.secure_url} alt="profile" />
         </div>
@@ -53,6 +53,7 @@ export const SidebarLeft = () => {
           {sidebarItems.map(({ title, path, icon, count }) => {
             return (
               <NavLink
+                key={path}
                 to={path}
                 className={
                   path === "/home/discover"

@@ -6,9 +6,10 @@ export const CommentForm = ({ handleSubmit }) => {
   const handleButtonClick = (e) => {
     e.preventDefault();
     handleSubmit(text);
+    settext("")
   };
   return (
-    <form className={styles.searchBar} onSubmit={handleButtonClick}>
+    <form className={styles.commentForm} onSubmit={handleButtonClick}>
       <input
         type="text"
         name="comment"

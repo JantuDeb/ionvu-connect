@@ -33,7 +33,7 @@ export const App = () => {
           <Route path="discover" element={<SidebarRight />} />
           <Route path="bookmarks" element={<Bookmark />} />
           <Route path="chats" element={<Chats />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="profile/:userId" element={<Profile />} />
           <Route path="theme" element={<Theme />} />
         </Route>
       </Routes>

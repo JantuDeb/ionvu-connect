@@ -1,28 +1,31 @@
-.comment{
+.comment {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0.5rem;
 }
 
-.flex{
+.flex {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
+
 .profileImg {
-    width: 4rem;
+    width: 2.5rem;
     aspect-ratio: 1/1;
     border-radius: 50%;
     overflow: hidden;
 }
 
-.searchBar {
+.commentForm {
     display: flex;
     background-color: var(--color-light);
     border-radius: var(--border-radius);
     padding: var(--search-padding);
     width: 100%;
     font-size: 0.9rem;
-    margin-top: 1rem;
+    margin: 0.5rem;
     color: var(--color-dark);
 }
 
@@ -32,4 +35,31 @@
     width: 100%;
     margin-left: 0.8rem;
     font-size: 0.9rem;
+}
+
+.commentBody {
+    background-color: var(--color-light);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.userName {
+    color: var(--color-black);
+    font-weight: 600;
+}
+
+.actionButton {
+    display: flex;
+    gap: 0.5rem;
+
+}
+
+.actionButton>button {
+    background-color: transparent;
+    color: var(--color-dark);
+}
+
+.replyForm{
+    display: flex;
+    align-items: center;
 }

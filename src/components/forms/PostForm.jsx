@@ -7,6 +7,7 @@ import Input from "../shared/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../features/post/post-slice";
 import Button from "../loader/Button";
+import EmojiPicker from "emoji-picker-react";
 
 export const PostForm = () => {
   const initialState = {
@@ -18,6 +19,7 @@ export const PostForm = () => {
   const [imgUrl, setImgUrl] = useState("");
   const [tag, setTag] = useState("");
   const [showInputTag, setShowInputTag] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const status = useSelector((state) => state.post.postCreateStatus);
@@ -62,8 +64,17 @@ export const PostForm = () => {
     }
   };
 
+  const onEmojiClick = (event, emojiObject) => {
+    event.preventDefault();
+    setPostData((data) => ({
+      ...data,
+      description: data.description + emojiObject.emoji,
+    }));
+    setShowEmoji(false);
+  };
+
   return (
-    <form className={styles.postForm}> 
+    <form className={styles.postForm}>
       <div className={styles.inputBox}>
         <div className={styles.profileImg}>
           <img src={user?.photo?.secure_url} alt="profile" />
@@ -123,7 +134,13 @@ export const PostForm = () => {
           >
             <FaHashtag size={20} />
           </button>
-          <GrEmoji size={20} />
+          <button
+            className={styles.btnTransparent}
+            onClick={() => setShowEmoji((v) => !v)}
+            type="button"
+          >
+            <GrEmoji size={20} />
+          </button>
         </div>
         <Button
           disabled={status === "loading"}
@@ -132,8 +149,12 @@ export const PostForm = () => {
           clickHandler={handleSubmit}
           btnStyle="btn btn-primary"
         />
-        {/* <button className="btn btn-primary" disabled={status==='loading'}>Post</button> */}
       </div>
+      {showEmoji && (
+        <div className={styles.emojiContainer}>
+          <EmojiPicker onEmojiClick={onEmojiClick} disableSearchBar />
+        </div>
+      )}
     </form>
   );
 };
